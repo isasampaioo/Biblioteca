@@ -1,6 +1,7 @@
 # Gerenciador de biblioteca
 
 print(30*'-','Gerenciador de biblioteca',30*'-')
+print()
 
 import json
 import os
@@ -10,7 +11,7 @@ nome_arquivo = ""
 
 usuarios = []
 
-caminho_livros = 'c:/Users/IsabellaPrazeresSamp/Documents/Logica_programacional/Biblioteca/atvdd.pyson'
+caminho_livros = 'c:/Users/IsabellaPrazeresSamp/Documents/Logica_programacional/Biblioteca/livros.json'
 
 # livros 
 if os.path.exists(caminho_livros):
@@ -37,6 +38,7 @@ while True:
                 json.dump(usuarios, f, ensure_ascii=False, indent=4)
 
             print('---Livro cadastrado com sucesso!')
+            print()
             continue
 
         case '2':
@@ -61,8 +63,10 @@ while True:
                 with open(caminho_livros, 'w', encoding='utf-8') as f:
                     json.dump(usuarios, f, ensure_ascii=False, indent=4)
                 print(f'Livro "{nome_antigo}" atualizado com sucesso!')
+                print()
             else:
                 print(f'Livro "{nome_antigo}" não encontrado!')
+                print()
             continue
         
         case '4':
@@ -73,6 +77,7 @@ while True:
                 with open(caminho_livros, 'w', encoding='utf-8') as f:
                     json.dump(usuarios, f, ensure_ascii=False, indent=4)
                 print(f'Livro "{nome_excluir}" excluído com sucesso!')
+                print()
             else:
                 print(f'Livro "{nome_excluir}" não encontrado!')
             continue
