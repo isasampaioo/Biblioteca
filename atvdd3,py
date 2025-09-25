@@ -1,0 +1,138 @@
+
+# Gerenciador de biblioteca
+
+print(30*'-','Gerenciador de biblioteca',30*'-')
+print()                       
+
+import json
+import os
+
+class Livro:
+
+    def __init__(self, nome, autor):
+        self.nome = nome
+        self.autor = autor
+
+    def salvar(self, Livros):
+        if not os.path.exists(Livros):
+            os.makedirs(Livros)
+        caminho = os.path.join(Livros, f'{self.nome.strip().lower()}.json')
+        with open(f'C://Users//ead//Documents//logica_programacao_aulas//Aula11//biblioteca.json', 'w', encoding='utf-8') as f:
+            json.dump(self.__dict__, f, ensure_ascii=False, indent=4)
+
+    @staticmethod
+    def carregar(nome, Livros):
+        caminho = os.path.join(Livros, f'{nome.strip().lower()}.json')
+        if os.path.exists(caminho):
+            with open(f'C://Users//ead//Documents//logica_programacao_aulas//Aula11//biblioteca.json', 'r', encoding='utf-8') as f:
+                dados = json.load(f)
+            return Livro(dados['nome'], dados['autor'])
+        return None
+
+    @staticmethod
+    def apagar(nome, Livros):
+        caminho = os.path.join(Livros, f'{nome.strip().lower()}.json')
+        if os.path.exists(caminho):
+            os.remove(caminho)
+            return True
+        return False
+
+    def salvar_dados(self, caminho, dados):
+        with open(f'C://Users//ead//Documents//logica_programacao_aulas//Aula11//biblioteca.json', 'w', encoding='utf-8') as f:
+            json.dump(dados, f, ensure_ascii=False, indent=4)
+
+    def carregar_dados(self, caminho):
+        if os.path.exists(caminho):
+            with open(f'C://Users//ead//Documents//logica_programacao_aulas//Aula11//biblioteca.json', 'r', encoding='utf-8') as f:
+                return json.load(f)
+        return []
+
+class Biblioteca:
+    def __init__(self, Livros='livros'):
+        self.Livros = Livros
+        if not os.path.exists(self.Livros):
+            os.makedirs(self.Livros)
+
+    def cadastrar_livro(self):
+        nome = input('Digite o nome do livro que deseja cadastrar: ')
+        autor = input('Digite o autor do livro: ')
+        livro = Livro(nome, autor)
+        livro.salvar(self.Livros)
+        print('----Cadastrado realizado com sucesso!')
+
+    def atualizar_livro(self):
+        nome = input('Informe o nome do livro que deseja atualizar: ')
+        livro = Livro.carregar(nome, self.Livros)
+
+        if livro:
+            print('Dados atuais:', 'Nome:', livro.nome, 'Autor:', livro.autor)
+            nome = input('Novo nome: ')
+            autor = input('Novo autor: ')
+            if nome:
+                livro.nome = nome
+            if autor:
+                livro.autor = autor
+
+            livro.salvar(self.Livros)
+            print('Livro atualizado')
+        else:
+            print('Livro não encontrado')
+
+    def apagar_livro(self):
+        nome = input('Digite o nome do livro para apagar: ')
+        if Livro.apagar(nome, self.Livros):
+            print('Livro apagado!')
+        else:
+            print('Livro não encontrado!')
+
+    def mostrar_livros(self):
+        def listar_livros(Livros):
+            livros = []
+            for arquivo in os.listdir(Livros):
+                if arquivo.endswith('.json'):
+                    caminho = os.path.join(Livros, arquivo)
+                    with open(f'C://Users//ead//Documents//logica_programacao_aulas//Aula11//biblioteca.json', 'r', encoding='utf-8') as f:
+                        dados = json.load(f)
+                        livros.append(dados)
+            return livros
+
+        livros = listar_livros(self.Livros)
+        if not livros:
+            print('Nenhum livro cadastrado!')
+        else:
+            print(30*'_', ' LIVROS ' , 30*'_')
+            for livro in livros:
+                print(f"Nome: {livro['nome'].capitalize()}")
+                print(f"Autor: {livro['autor']}")
+                print('_'*60)
+
+def main():
+    biblioteca = Biblioteca()
+    while True:
+        print('__________BEM VINDO A BIBLIOTECA__________')
+        print('1 - Cadastrar livro ')
+        print('2 - Atualizar livros  ')
+        print('3 - Apagar cadastro de um livro ')
+        print('4 - Mostrar livros')
+        print('5 - Sair')
+
+        opcao = input('Escolha uma opção: ')
+    
+
+        match opcao:
+            case '1':
+                biblioteca.cadastrar_livro()
+            case '2':
+                biblioteca.atualizar_livro()
+            case '3':
+                biblioteca.apagar_livro()
+            case '4':
+                biblioteca.mostrar_livros()
+            case '5':
+                print('Saindo...')
+                break
+            case _:
+                print('Opção inválida...')
+
+if __name__ == '__main__':
+    main()
